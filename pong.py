@@ -69,26 +69,30 @@ is_pause = False
 def paddle_a_up():
     if is_pause == False:
         y = paddle_a.ycor()
-        y += 20
-        paddle_a.sety(y)
+        if y <= 250:
+            y += 20
+            paddle_a.sety(y)
 
 def paddle_a_down():
     if is_pause == False:
         y = paddle_a.ycor()
-        y -= 20
-        paddle_a.sety(y)
+        if y >= -250:
+            y -= 20
+            paddle_a.sety(y)
 
 def paddle_b_up():
     if is_pause == False:
         y = paddle_b.ycor()
-        y += 20
-        paddle_b.sety(y)
+        if y <= 250:
+            y += 20
+            paddle_b.sety(y)
 
 def paddle_b_down():
     if is_pause == False:
         y = paddle_b.ycor()
-        y -= 20
-        paddle_b.sety(y)
+        if y >= -250:
+            y -= 20
+            paddle_b.sety(y)
 
 def interrupt():
     global is_pause
