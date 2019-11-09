@@ -6,7 +6,6 @@ Arcade game Pong
 ## Requirements
 
 - Python 3.5.4
-<br>
 
 ## Default keyboard controls
 
