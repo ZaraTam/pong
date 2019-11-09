@@ -62,26 +62,41 @@ scores.write("0", align=ALIGN, font=FONT)
 scores.goto(200, 260)
 scores.write("0", align=ALIGN, font=FONT)
 
+# Pause and resume game
+is_pause = False
+
 # Move paddles
 def paddle_a_up():
-    y = paddle_a.ycor()
-    y += 20
-    paddle_a.sety(y)
+    if is_pause == False:
+        y = paddle_a.ycor()
+        y += 20
+        paddle_a.sety(y)
 
 def paddle_a_down():
-    y = paddle_a.ycor()
-    y -= 20
-    paddle_a.sety(y)
+    if is_pause == False:
+        y = paddle_a.ycor()
+        y -= 20
+        paddle_a.sety(y)
 
 def paddle_b_up():
-    y = paddle_b.ycor()
-    y += 20
-    paddle_b.sety(y)
+    if is_pause == False:
+        y = paddle_b.ycor()
+        y += 20
+        paddle_b.sety(y)
 
 def paddle_b_down():
-    y = paddle_b.ycor()
-    y -= 20
-    paddle_b.sety(y)
+    if is_pause == False:
+        y = paddle_b.ycor()
+        y -= 20
+        paddle_b.sety(y)
+
+def interrupt():
+    global is_pause
+    if is_pause == False:
+        is_pause = True
+    else:
+        is_pause = False
+    return is_pause
 
 # Keyboard bindings
 window.listen()
@@ -89,53 +104,60 @@ window.onkeypress(paddle_a_up, "d")
 window.onkeypress(paddle_a_down, "c")
 window.onkeypress(paddle_b_up, "k")
 window.onkeypress(paddle_b_down, "m")
+window.onkeypress(interrupt, "space")
 
+# Game loop
 while True:
-    window.update()
 
-    # Move the ball
-    ball.setx(ball.xcor() + ball.dx)
-    ball.sety(ball.ycor() + ball.dy)
+    if is_pause == False:
+        window.update()
 
-    # Check borders
+        # Move the ball
+        ball.setx(ball.xcor() + ball.dx)
+        ball.sety(ball.ycor() + ball.dy)
 
-    # Top and bottom
-    if ball.ycor() > 290:
-        ball.sety(290)
-        ball.dy *= -1
-        os.system("afplay bounce.wav &")
+        # Check borders
 
-    elif ball.ycor() < -290:
-        ball.sety(-290)
-        ball.dy *= -1
-        os.system("afplay bounce.wav &")
+        # Top and bottom
+        if ball.ycor() > 290:
+            ball.sety(290)
+            ball.dy *= -1
+            os.system("afplay bounce.wav &")
 
-    # Left and right
-    if ball.xcor() > 350:
-        score_a += 1
-        scores.clear()
-        scores.goto(-200, 260)
-        scores.write(score_a, align=ALIGN, font=FONT)
-        scores.goto(200, 260)
-        scores.write(score_b, align=ALIGN, font=FONT)
-        ball.goto(0, 0)
-        ball.dx *= -1
+        elif ball.ycor() < -290:
+            ball.sety(-290)
+            ball.dy *= -1
+            os.system("afplay bounce.wav &")
 
-    elif ball.xcor() < -350:
-        score_b += 1
-        scores.clear()
-        scores.goto(-200, 260)
-        scores.write(score_a, align=ALIGN, font=FONT)
-        scores.goto(200, 260)
-        scores.write(score_b, align=ALIGN, font=FONT)
-        ball.goto(0, 0)
-        ball.dx *= -1
+        # Left and right
+        if ball.xcor() > 350:
+            score_a += 1
+            scores.clear()
+            scores.goto(-200, 260)
+            scores.write(score_a, align=ALIGN, font=FONT)
+            scores.goto(200, 260)
+            scores.write(score_b, align=ALIGN, font=FONT)
+            ball.goto(0, 0)
+            ball.dx *= -1
 
-    # Paddle and ball collisions
-    if ball.xcor() < -340 and ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() - 50:
-        ball.dx *= -1 
-        os.system("afplay bounce.wav &")
+        elif ball.xcor() < -350:
+            score_b += 1
+            scores.clear()
+            scores.goto(-200, 260)
+            scores.write(score_a, align=ALIGN, font=FONT)
+            scores.goto(200, 260)
+            scores.write(score_b, align=ALIGN, font=FONT)
+            ball.goto(0, 0)
+            ball.dx *= -1
 
-    elif ball.xcor() > 340 and ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() - 50:
-        ball.dx *= -1
-        os.system("afplay bounce.wav &")
+        # Paddle and ball collisions
+        if ball.xcor() < -340 and ball.ycor() < paddle_a.ycor() + 50 and ball.ycor() > paddle_a.ycor() - 50:
+            ball.dx *= -1 
+            os.system("afplay bounce.wav &")
+
+        elif ball.xcor() > 340 and ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() - 50:
+            ball.dx *= -1
+            os.system("afplay bounce.wav &")
+
+    else:
+        window.update()

@@ -18,6 +18,9 @@ Up - `k`<br>
 Down - `m`
 <br>
 
+Pause or resume game - `Space bar`
+<br>
+
 ## License
 
 This project is licensed under the GNU General Public License v3.0 - see [LICENSE](https://github.com/ZaraTam/pong/blob/master/LICENSE) for details
